@@ -47,3 +47,15 @@ Sub duplicados()
     End With
   End With
 End Sub
+
+Sub Mata_NoAscii()
+    'borra todos los caracteres no ascii y no imprimibles de textos de seleccion
+    'requiere vbscript enlazado
+    Dim regEx As Object, i As Range
+    Set regEx = CreateObject("vbscript.regexp")
+    regEx.Pattern = "[^\u0020-\u007F]"
+    For Each i In Selection.Cells
+      If Application.WorksheetFunction.IsText(i.Value) Then i.Value = regEx.Replace(i.Value, "")
+    Next
+    Set regEx = Nothing
+End Sub
