@@ -1,0 +1,49 @@
+Function isvisible(rng As Range)
+     'helper function
+    isvisible = Not (rng.EntireColumn.Hidden Or rng.EntireRow.Hidden)
+End Function
+
+Sub Sufijo()
+ 'asks for string and concatenates it at the end of all visibl strings of the selection
+  Dim b As String
+  Dim i As Range
+  b = InputBox("Sufijo?")
+  For Each i In Selection
+      If isvisible(i) and Application.WorksheetFunction.IsText(i) Then i.Value = i.Value & b
+  Next
+End Sub
+
+Sub PREFIJO()
+  'asks for string and concatenates it at the beggining of all visible strings of the selection
+  Dim b As String
+  Dim i As Range
+    b = InputBox("Prefijo?")
+  For Each i In Selection
+    If isvisible(i) and Application.WorksheetFunction.IsText(i) Then i.Value = b & i.Value
+  Next
+End Sub
+
+Sub Incrementa()
+  'asks a value and adds it to all visible numeric values of the selection
+  Dim b As Integer
+  Dim i As Range
+  b = Val(InputBox("Incremento?"))
+  If b = 0 Then Exit Sub
+  For Each i In Selection
+     If isvisible(i) And IsNumeric(i) And Not IsEmpty(i) Then i.Value = i.Value + b
+  Next
+End Sub
+
+Sub duplicados()
+  'adds validation to range, marking n red background all duplicate values
+  With Selection
+    .Cells(1, 1).Activate
+    .FormatConditions.Delete
+    .FormatConditions.AddUniqueValues
+    With .FormatConditions(1)
+      .DupeUnique = xlDuplicate
+      .Interior.Color = RGB(255, 0, 0)
+      .StopIfTrue = False
+    End With
+  End With
+End Sub
