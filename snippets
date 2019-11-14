@@ -1,0 +1,23 @@
+Sub inicio()
+  ' sub to be called at the start of tested complex scripts to speed them up
+  'it saves present cursor position to be recoverd later
+  
+  Application.ScreenUpdating = False
+  Application.Calculation = xlCalculationManual
+  ActiveWorkbook.Names.Add Name:="MyOrigPlace", RefersTo:=Selection
+  Application.DisplayAlerts = False
+
+End Sub
+
+
+Sub final()
+  ' sub to be called at the end of tested complex scripts to recover functionality
+  'it recovers cursor position saved by inicio
+  Application.ScreenUpdating = True
+  Application.Calculation = xlCalculationAutomatic
+  'RestoreWindowPosition
+  Application.GoTo Reference:="MyOrigPlace"
+  ActiveWorkbook.Names("MyOrigPlace").Delete
+  Application.DisplayAlerts = True
+End Sub
+
