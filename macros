@@ -59,3 +59,24 @@ Sub Mata_NoAscii()
     Next
     Set regEx = Nothing
 End Sub
+
+Sub eliminaespacios()
+'trims spaces, converts remaining spaces and hyphens to undrscores. 
+Dim s As Range
+Dim c As Range
+Set s = Selection
+
+For Each c In s.Cells
+ If Application.WorksheetFunction.IsText(i.Value) Then c = Trim(c.Value)
+Next
+
+s.Replace What:="-", Replacement:=" ", LookAt:=xlPart, _
+SearchOrder:=xlByRows, MatchCase:=False
+
+s.Replace What:=" ", Replacement:="_", LookAt:=xlPart, _
+SearchOrder:=xlByRows, MatchCase:=False
+
+s.Replace What:="__", Replacement:="_", LookAt:=xlPart, _
+SearchOrder:=xlByRows, MatchCase:=False
+
+End Sub
