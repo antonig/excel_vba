@@ -53,9 +53,9 @@ Sub Mata_NoAscii()
     'requiere vbscript enlazado
     Dim regEx As Object, i As Range
     Set regEx = CreateObject("vbscript.regexp")
-    regEx.Pattern = "[^\u0020-\u007F]"
+    regEx.Pattern = "[^_0_9A-Za-z]"
     For Each i In Selection.Cells
-      If Application.WorksheetFunction.IsText(i.Value) Then i.Value = regEx.Replace(i.Value, "")
+      If Application.WorksheetFunction.IsText(i.Value) Then i.Value = regEx.Replace(i.Value, "_")
     Next
     Set regEx = Nothing
 End Sub
@@ -80,3 +80,21 @@ s.Replace What:="__", Replacement:="_", LookAt:=xlPart, _
 SearchOrder:=xlByRows, MatchCase:=False
 
 End Sub
+
+Sub Seleccion_a_csv()
+    'copiamos seleccion a nuevo libro que salvamos a csv
+    Dim twb As Workbook
+    Dim fpath As String: fpath = InputBox("Nombre archivo?")
+    If fpath = "" Then Exit Sub
+    fpath = Environ("USERPROFILE") & "\Desktop\" & fpath
+    Selection.Copy
+    Set twb = Workbooks.Add                                   'crea libro temporal
+    twb.Worksheets(1).Range("A1").PasteSpecial xlPasteValues  'copia valores
+    Application.CutCopyMode = False
+   ' Application.DisplayAlerts = False                         'salva a csv sin preguntar
+    twb.SaveAs Filename:=fpath, FileFormat:=xlCSV, CreateBackup:=False
+    twb.Close
+    Application.DisplayAlerts = True
+    MsgBox ("CSV " & fpath & " creado.")
+End Sub
+
