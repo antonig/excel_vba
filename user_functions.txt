@@ -1,0 +1,61 @@
+Function ENCONTRARR(hay As String, needle As String, Optional start As Long = -1) As Long
+   'wrapper for vba's InstrRev
+   ENCONTRARR = InStrRev(hay, needle, start)
+End Function
+
+Function Re_Extract(myRange As Range, matchPattern As String, Optional i As Integer = 0, Optional j As Integer = 0) As Variant
+    'devuelve el i match correspondiente a $j
+    'necesita les Regex de VBS
+    Dim regEx As Object
+    Set regEx = CreateObject("vbscript.regexp")
+
+    Dim m As Variant
+    With regEx
+        .Global = True
+        .MultiLine = True
+        .IgnoreCase = False
+        .Pattern = matchPattern
+        Set m = .Execute(myRange)
+        Re_Extract = m(i).SubMatches(j)
+    End With
+End Function
+
+
+Function entre(s As Variant, Optional f1 As Variant = Null, Optional f2 As Variant = Null) As Variant
+   'detectar error valores no enteros
+   'parametro f3 opcional para f1 string, numero de coincidencia
+   If Not Application.IsText(s) Then entre = Null: Exit Function
+   If s = vbNullString Then entre = s: Exit Function
+   Dim l1, l2 As Long
+    If IsNull(f1) Then                 'no hy f1, desde principio
+      l1 = 1
+   ElseIf Application.IsText(f1) Then  'desde primera ocurrencia de cadena f1
+      l1 = InStr(s, f1)
+      If l1 = 0 Then entre = vbNullString: Exit Function
+      l1 = l1 + 1
+   Else
+      If f1 > 0 Then                   'f1 es posicion desde inicio
+        l1 = f1
+      Else                             'f1 es posicion desde final  ( como right$ con parametro negativo)
+        l1 = Len(s) + f1
+        If l1 < 1 Then entre = vbNullString: Exit Function
+      End If
+   End If
+   
+   If IsNull(f2) Then                   'hasta final
+      entre = Mid(s, l1): Exit Function
+   ElseIf Application.IsText(f2) Then   'hasta primera ocurrencia de cadena f2 apartir de f1
+      l2 = InStr(l1 + 1, s, f2)
+      If l2 = 0 Then entre = Mid(s, l1): Exit Function
+      l2 = l2 - l1
+   Else
+      If f2 > 0 Then                    'f2 es longitud salida
+        l2 = f2
+      Else                              'si negativo f2 es cuenta desde el final
+        l2 = Len(s) + l2 - l1
+      End If
+      If l2 < 1 Then entre = vbNullString: Exit Function
+   End If
+  
+   entre = Mid(s, l1, l2)
+End Function
