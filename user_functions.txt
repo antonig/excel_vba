@@ -21,18 +21,41 @@ Function Re_Extract(myRange As Range, matchPattern As String, Optional i As Inte
 End Function
 
 
-Function entre(s As Variant, Optional f1 As Variant = Null, Optional f2 As Variant = Null) As Variant
-   'detectar error valores no enteros
-   'parametro f3 opcional para f1 string, numero de coincidencia
+Function entre(s As Variant, Optional f1 As Variant = Null, Optional f2 As Variant = Null, Optional f3 As Integer = 1) As Variant
+   'FUNCION 
+   ' devuelve parte de string, bien  por posicion y longitud  (con indices negativos como slice de javascript)
+   ' bien entre dos separadores de texto o por una combinacion de separador, posicion o posicion, separador
+   ' si el marcador de inicio es un separador, un cuarto parametro opcional permite iniciar en el n-esimo separador
+   'ARGUMENTOS
+   ' s string de partida 
+   ' f1 separador inicial o posicion inicial (negativo desde el final)
+   ' f2 separador final, largo si positivo, si negativo es posicion dese el final
+   ' f3 numero de orden del separador inicial (negativo desde el final)
+
+   
+   'falta detectar valores no enteros
    If Not Application.IsText(s) Then entre = Null: Exit Function
    If s = vbNullString Then entre = s: Exit Function
-   Dim l1, l2 As Long
-    If IsNull(f1) Then                 'no hy f1, desde principio
+   Dim l1, l2 As Long, i As Long, cnt As Long, t As Long
+   If IsNull(f1) Then                 'no hy f1, desde principio
       l1 = 1
-   ElseIf Application.IsText(f1) Then  'desde primera ocurrencia de cadena f1
-      l1 = InStr(s, f1)
-      If l1 = 0 Then entre = vbNullString: Exit Function
-      l1 = l1 + 1
+   ElseIf Application.IsText(f1) Then  'desde f3 esima ocurrencia de cadena f1
+     If f3 >= 0 Then
+      cnt = f3: t = 1: If cnt = 0 Then cnt = 1
+      For i = 1 To cnt                 'si f3>=0 tantos instr  como f3
+        l1 = InStr(t, s, f1)
+        If l1 = 0 Then entre = vbNullString: Exit Function
+        t = l1 + 1
+      Next
+     Else                             'si f3<0 tantos instrrev  como f3
+      cnt = -f3: t = -1
+      For i = 1 To cnt
+        l1 = InStrRev(s, f1, t)
+        If l1 = 0 Then entre = vbNullString: Exit Function
+        t = l1 - 1
+      Next
+     End If
+      l1 = l1 + Len(f1)
    Else
       If f1 > 0 Then                   'f1 es posicion desde inicio
         l1 = f1
@@ -56,6 +79,6 @@ Function entre(s As Variant, Optional f1 As Variant = Null, Optional f2 As Varia
       End If
       If l2 < 1 Then entre = vbNullString: Exit Function
    End If
-  
    entre = Mid(s, l1, l2)
 End Function
+
