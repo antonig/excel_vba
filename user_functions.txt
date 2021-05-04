@@ -22,18 +22,20 @@ End Function
 
 
 Function entre(s As Variant, Optional f1 As Variant = Null, Optional f2 As Variant = Null, Optional f3 As Integer = 1) As Variant
-   'FUNCION 
-   ' devuelve parte de string, bien  por posicion y longitud  (con indices negativos como slice de javascript)
-   ' bien entre dos separadores de texto o por una combinacion de separador, posicion o posicion, separador
-   ' si el marcador de inicio es un separador, un cuarto parametro opcional permite iniciar en el n-esimo separador
+   'FUNCION : devuelve parte de string, 
+   '  -por posicion y longitud  (con indices negativos como slice de javascript)
+   '  -entre dos separadores de 1 o mas caracteres
+   '  -por una combinacion de separador, posicion o posicion, separador
+   '   si el marcador de inicio es un separador, un cuarto parametro opcional permite iniciar en el n-esimo separador
    'ARGUMENTOS
    ' s string de partida 
-   ' f1 separador inicial o posicion inicial (negativo desde el final)
-   ' f2 separador final, largo si positivo, si negativo es posicion dese el final
-   ' f3 numero de orden del separador inicial (negativo desde el final)
-
+   ' f1 separador inicial o posicion inicial (negativo desde el final), si nulo, desde el inicio
+   ' f2 separador final, largo si positivo, si negativo es posicion dese el final, si nulo hasta el final
+   ' f3 numero de orden del separador inicial (negativo desde el final),si nulo, primera ocueerencia
+   ' =entre(s,,4) equivale a left(s,4)
+   ' =entre(s,-4) equivale a right(s,4)
    
-   'falta detectar valores no enteros
+   'TODO: falta detectar argumentos no enteros
    If Not Application.IsText(s) Then entre = Null: Exit Function
    If s = vbNullString Then entre = s: Exit Function
    Dim l1, l2 As Long, i As Long, cnt As Long, t As Long
