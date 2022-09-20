@@ -35,6 +35,6 @@ usually required in Excel to split a string
 ##Examples:
   =entre(B5,"KTE","feature") does the same as =MID(B5,SEARCH("KTE",B5)+3,SEARCH("feature",B5)-SEARCH("KTE",B5)-4)
 
-  =entre(B5,,4) does the same as =left(B5,4)
+  =entre(B5,,4) does the same as = left(B5,4)
 
-  =entre(B5,-4) does the same as =right(B5,4)
+  =entre(B5,-4) does the same as = right(B5,4)
