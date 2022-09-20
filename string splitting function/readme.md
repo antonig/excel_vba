@@ -29,7 +29,8 @@ usually required in Excel to split a string
 
 	      If string, cuts before the first occurrence after start
 
-#### 4  integer. Take the nth occurrence of the start point. Only if argument 2 (start point) is a string, indicates 
+#### 4 occurrence. 
+   Integer. Take the nth occurrence of the start point. Only if argument 2 (start point) is a string, indicates 
    to start after the nth occurrence of the start point pattern
 
 ## Examples:
